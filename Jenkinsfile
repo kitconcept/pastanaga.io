@@ -2,7 +2,13 @@
 
 pipeline {
 
-  agent any
+  agent {
+    label 'node'
+  }
+
+  tools {
+    nodejs "nodejs-10"
+  }
 
   options {
     disableConcurrentBuilds()
@@ -14,35 +20,40 @@ pipeline {
     // Build
     stage('Build') {
       agent {
-        label 'master'
+        label 'node'
       }
       steps {
         deleteDir()
         checkout scm
         sh 'npm install'
         sh 'node_modules/gatsby/dist/bin/gatsby.js build --prefix-paths'
+        sh 'tar cfz dist.tgz dist'
+        stash includes: 'dist.tgz', name: 'dist.tgz'
       }
     }
 
     // Deploy
     stage('Deploy') {
       agent {
-        label 'master'
+        label 'node'
       }
       when {
         branch 'master'
       }
       steps {
-        sh 'ssh kitconcept.io "(cd /srv/pastanaga.io/ && git fetch --all && git reset --hard origin/master)"'
-        sh 'ssh kitconcept.io "(cd /srv/pastanaga.io/ && npm install)"'
-        sh 'ssh kitconcept.io "(cd /srv/pastanaga.io/ && node_modules/gatsby/dist/bin/gatsby.js build --prefix-paths)"'
+        deleteDir()
+        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git clean -fd)"'
+        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git fetch --all && git reset --hard origin/mmaster)"'
+        unstash 'dist.tgz'
+        sh 'scp dist.tgz cloud1.kitconcept.com:/srv/pastanaga.io/'
+        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && tar xfz dist.tgz)"'
       }
     }
 
     // Performance Tests
     stage('Performance Tests') {
       agent {
-        label 'master'
+        label 'node'
       }
       when {
         branch 'master'
