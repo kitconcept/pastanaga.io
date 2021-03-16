@@ -27,8 +27,8 @@ pipeline {
         checkout scm
         sh 'npm install'
         sh 'node_modules/gatsby/dist/bin/gatsby.js build --prefix-paths'
-        sh 'tar cfz dist.tgz dist'
-        stash includes: 'dist.tgz', name: 'dist.tgz'
+        sh 'tar cfz public.tgz public'
+        stash includes: 'public.tgz', name: 'public.tgz'
       }
     }
 
@@ -44,9 +44,9 @@ pipeline {
         deleteDir()
         sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git clean -fd)"'
         sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git fetch --all && git reset --hard origin/mmaster)"'
-        unstash 'dist.tgz'
-        sh 'scp dist.tgz cloud1.kitconcept.com:/srv/pastanaga.io/'
-        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && tar xfz dist.tgz)"'
+        unstash 'public.tgz'
+        sh 'scp public.tgz cloud1.kitconcept.com:/srv/pastanaga.io/'
+        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && tar xfz public.tgz)"'
       }
     }
 
