@@ -35,7 +35,7 @@ pipeline {
     // Deploy
     stage('Deploy') {
       agent {
-        label 'node'
+        label 'kitconcept.io'
       }
       when {
         branch 'master'
