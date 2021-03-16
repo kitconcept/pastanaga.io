@@ -42,8 +42,7 @@ pipeline {
       }
       steps {
         deleteDir()
-        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git clean -fd)"'
-        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git fetch --all && git reset --hard origin/main && git pull)"'
+        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git clean -fd && git fetch --all && git reset --hard origin/main && git pull)"'
         unstash 'public.tgz'
         sh 'scp public.tgz cloud1.kitconcept.com:/srv/pastanaga.io/'
         sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && tar xfz public.tgz)"'
