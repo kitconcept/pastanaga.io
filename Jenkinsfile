@@ -38,12 +38,12 @@ pipeline {
         label 'kitconcept.io'
       }
       when {
-        branch 'master'
+        branch 'main'
       }
       steps {
         deleteDir()
         sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git clean -fd)"'
-        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git fetch --all && git reset --hard origin/mmaster)"'
+        sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && git fetch --all && git reset --hard origin/main)"'
         unstash 'public.tgz'
         sh 'scp public.tgz cloud1.kitconcept.com:/srv/pastanaga.io/'
         sh 'ssh cloud1.kitconcept.com "(cd /srv/pastanaga.io/ && tar xfz public.tgz)"'
@@ -56,7 +56,7 @@ pipeline {
         label 'node'
       }
       when {
-        branch 'master'
+        branch 'main'
       }
       steps {
         deleteDir()
