@@ -11,6 +11,13 @@ export const Header = () => (
     <div className="logo">
       <img src={logo} alt="logo" />
     </div>
+    <nav>
+      <ul>
+        <li>
+          <a href="https://pastanaga.io/icons">Icons</a>
+        </li>
+      </ul>
+    </nav>
     {/*}    <nav>
       <ul>
         <li>
