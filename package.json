@@ -7,7 +7,7 @@
     "gatsby": "^1.9.119",
     "gatsby-link": "^1.6.28",
     "gatsby-plugin-react-helmet": "^1.0.8",
-    "gatsby-plugin-sass": "^1.0.14"
+    "gatsby-plugin-sass": "^1.0.26"
   },
   "keywords": [
     "gatsby"
